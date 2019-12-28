@@ -1,0 +1,6 @@
+    protected $attributes = [
+        'name' => 'DummyGraphqlName',
+        'description' => 'A type',
+        'model' => DummyModel,
+
+    ];

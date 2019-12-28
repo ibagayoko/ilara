@@ -1,0 +1,4 @@
+            'DummyFieldName' => [
+                'type' => DummyType,
+                'description' => 'DummyDescription',
+            ],
