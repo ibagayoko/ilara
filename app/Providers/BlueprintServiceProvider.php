@@ -20,6 +20,8 @@ class BlueprintServiceProvider extends ServiceProvider
             $blue->registerGenerator(new \App\Blueprint\Generators\GraphQLTypeGenerator($app['files']));
             $blue->registerGenerator(new \App\Blueprint\Generators\GraphQLQueryGenerator($app['files']));
             $blue->registerGenerator(new \App\Blueprint\Generators\GraphQLQueryPlurialGenerator($app['files']));
+            $blue->registerGenerator(new \App\Blueprint\Generators\GraphQLSchemaGenerator($app['files']));
+
     
             return $blue;
         });
