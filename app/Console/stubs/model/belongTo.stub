@@ -1,0 +1,4 @@
+    public function DummyName() : BelongsTo
+    {
+        return null;
+    }

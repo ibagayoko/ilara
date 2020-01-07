@@ -6,95 +6,95 @@ models:
         state: string
         country_id: id
 
-    Company:
-        name: string
-        logo: nullable string
-        hash: string
-    CompanySetting:
-        company_id: id
+    # Company:
+    #     name: string
+    #     logo: nullable string
+    #     hash: string
+    # CompanySetting:
+    #     company_id: id
     Country:
         name: string
         code: string
         phonecode: Integer
 
-    Currency:
-        name: string
-        code: string
-        symbol: nullable string
+    # Currency:
+    #     name: string
+    #     code: string
+    #     symbol: nullable string
 
-    Estimate:
-        estimated_at: date
-        status: string
+    # Estimate:
+    #     estimated_at: date
+    #     status: string
 
-    EstimateItem:
-        name: string
-        estimate_id: id
+    # EstimateItem:
+    #     name: string
+    #     estimate_id: id
     
 
-    EstimateTemplate:
-        name: string
-        view: string
-        path: string
+    # EstimateTemplate:
+    #     name: string
+    #     view: string
+    #     path: string
 
 
-    Expense:
-        expensed_at: date
-        expense_category_id: id
+    # Expense:
+    #     expensed_at: date
+    #     expense_category_id: id
 
-    ExpenseCategory:
-        name: string
-        description: nullable string
-
-
-    Invoice:
-        invoiced_at: date
-        due_at: date
-        invoice_number: string
-        reference_number: string
-        status: string
-        paid_status: string
-        notes: text
-        hash: string
-        invoice_template_id: id
-        sent: bool
+    # ExpenseCategory:
+    #     name: string
+    #     description: nullable string
 
 
+    # Invoice:
+    #     invoiced_at: date
+    #     due_at: date
+    #     invoice_number: string
+    #     reference_number: string
+    #     status: string
+    #     paid_status: string
+    #     notes: text
+    #     hash: string
+    #     invoice_template_id: id
+    #     sent: bool
 
 
 
-    InvoiceItem:
-        name: string
-        invoice_id: id
 
-    InvoiceTemplate:
-        name: string
-        view: string
-        path: string
 
-    Item:
-        name: string
-        description: nullable string
-        unit: nullable string
-        price: Integer
-        company_id: id
+    # InvoiceItem:
+    #     name: string
+    #     invoice_id: id
+
+    # InvoiceTemplate:
+    #     name: string
+    #     view: string
+    #     path: string
+
+    # Item:
+    #     name: string
+    #     description: nullable string
+    #     unit: nullable string
+    #     price: Integer
+    #     company_id: id
         
-    Media:
-        # model: morphs
-        path: string
-    Payment:
-        payment_number: string
-        payment_mode: string
+    # Media:
+    #     # model: morphs
+    #     path: string
+    # Payment:
+    #     payment_number: string
+    #     payment_mode: string
 
-    Setting:
-        value: string
+    # Setting:
+    #     value: string
 
     
-    Tax:
-        name: string
-        tax_type_id: id
+    # Tax:
+    #     name: string
+    #     tax_type_id: id
 
-    TaxType:
-        name: string
-        percent: decimal:5,2
+    # TaxType:
+    #     name: string
+    #     percent: decimal:5,2
 
 

@@ -7,3 +7,4 @@ extend type Query {
     QueryMultiple: [DummyType!]! @paginate(defaultCount: 10)
     QuerySingle(id: ID @eq): DummyType @find
 }
+

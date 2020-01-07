@@ -1,0 +1,63 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+type Query {
+    users: [User!]! @paginate(defaultCount: 10)
+    user(id: ID @eq): User @find
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Mutation {
+  createUser(name: String!, email: String!, password: String!): User! @create
+  updateUser(id: ID, email: String, password: String): User @update
+  upsertUser(id: ID!, name: String!, email: String): User @upsert
+   deleteUser(id: ID!): User @delete
+}
+#import */*.query.graphql
+#import */*.mutation.graphql
+
+
+# type Mutation {
+#   updatePost(input: UpdatePostInput! @spread): Post @update
+# }
+
+# input UpdatePostInput {
+#   id: ID!
+#   title: String
+#   authors: UpdateAuthorRelation
+# }
+
+# input UpdateAuthorRelation {
+#   create: [CreateAuthorInput!]
+#   connect: [ID!]
+#   update: [UpdateAuthorInput!]
+#   upsert: [UpsertAuthorInput!]
+#   sync: [ID!]
+#   syncWithoutDetaching: [ID!]
+#   delete: [ID!]
+#   disconnect: [ID!]
+# }
+
+# input CreateAuthorInput {
+#   name: String!
+# }
+
+# input UpdateAuthorInput {
+#   id: ID!
+#   name: String!
+# }
+
+# input UpsertAuthorInput {
+#   id: ID!
+#   name: String!
+# }

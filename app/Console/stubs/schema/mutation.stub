@@ -1,0 +1,6 @@
+extend type Mutation{
+     createDummyType(DummyFields): DummyType! @create
+#    updateDummyType(id: ID, email: String, password: String): DummyType @update
+#    upsertDummyType(id: ID!, name: String!, email: String): DummyType @upsert
+    deleteDummyType(id: ID!): DummyType @delete
+}

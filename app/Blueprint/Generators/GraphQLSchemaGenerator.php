@@ -30,13 +30,19 @@ class GraphQLSchemaGenerator implements Generator
 
         /** @var \Blueprint\Models\Model $model */
         foreach ($tree['models'] as $model) {
-            $path = $this->getPath($model);
+            $path = $this->getPath($model, 'query');
+            $pathMut = $this->getPath($model, 'mutation');
             $this->files->put(
                 $path,
                 $this->populateStub($stub, $model)
             );
+            $this->files->put(
+                $pathMut,
+                $this->populateMutStub($this->getStub('mutation'), $model)
+            );
 
             $output['created'][] = $path;
+            $output['created'][] = $pathMut;
         }
 
         return $output;
@@ -50,10 +56,35 @@ class GraphQLSchemaGenerator implements Generator
         $body = $this->buildFields($model);
         
         $stub = str_replace('// ...', trim($body), $stub);
+
+        // $mutationBody = $this->buildMutationFields($model);
+
+        // $stub = str_replace('DummyFields', trim($mutationBody), $stub);
         
         // Query definition
         $stub = str_replace('QuerySingle', Str::lower($model->name()), $stub);
         $stub = str_replace('QueryMultiple', Str::lower(Str::plural($model->name())), $stub);
+        
+
+        return $stub;
+    }
+
+    protected function populateMutStub(string $stub, Model $model)
+    {
+        // Type definition
+        $stub = str_replace('DummyType', $model->name(), $stub);
+        
+        // $body = $this->buildFields($model);
+        
+        // $stub = str_replace('// ...', trim($body), $stub);
+
+        $mutationBody = $this->buildMutationFields($model);
+
+        $stub = str_replace('DummyFields', trim($mutationBody), $stub);
+        
+        // Query definition
+        // $stub = str_replace('QuerySingle', Str::lower($model->name()), $stub);
+        // $stub = str_replace('QueryMultiple', Str::lower(Str::plural($model->name())), $stub);
         
 
         return $stub;
@@ -105,9 +136,55 @@ class GraphQLSchemaGenerator implements Generator
 
         return $fields;
     }
+    private function buildMutationFields(Model $model)
+    {
+        $columns = $model->columns();
+
+        if (empty($columns)) {
+            return '';
+        }
 
 
-    protected function getPath(Model $model)
+        $fields = '';
+        /** @var Column $column */
+        foreach ($columns as $column) {
+            $field = '';
+            
+            
+            $name = $column->name();
+            $dataType = Str::studly($column->dataType());
+            $dataType = $dataType=='Id'? 'ID' : $dataType;
+            $dataType = $dataType=='Integer'? 'Int' : $dataType;
+            $dataType = $dataType=='Text'? 'String' : $dataType;
+            $dataType = $dataType=='Decimal'? 'Float' : $dataType;
+            $belongTo ='';
+            if(Str::endsWith($column->name(), '_id')){
+                $name = Str::substr($column->name(), 0, -3);
+                $class = $dataType=  Str::studly($column->attributes()[0] ?? $name);
+                $belongTo = ' @belongsTo';
+                
+            }
+            $field =  $name . ': ' .$dataType;
+            if (!in_array('nullable' , $column->modifiers())) {
+                $field .=  '!';
+            }
+            // $field .= $belongTo;
+
+            $fields .=   $field .', ' ;
+        }
+        
+        if($model->usesTimestamps()){
+            // $fields .= self::INDENT . 'created_at: DateTime' . PHP_EOL;
+            // $fields .= self::INDENT . 'updated_at: DateTime' . PHP_EOL;
+        }
+        
+        $fields = Str::beforeLast($fields, ',');
+
+        return $fields;
+    }
+
+
+    protected function getPath(Model $model, $postfix='')
     {
         $name = Str::snake($model->name());
         $folder = Str::snake(Str::beforeLast($name, '_'), '/');
@@ -115,7 +192,8 @@ class GraphQLSchemaGenerator implements Generator
         $fpath = base_path('graphql/'. $folder );
         $fs = new Filesystem;
         if (!$fs->exists($fpath)) $fs->makeDirectory($fpath, 0755, true);
-        return  base_path('graphql/'. $folder .  $name .'.graphql');
+        $postfix = Str::start($postfix, '.');
+        return  base_path('graphql/'. $folder .  $name . $postfix.'.graphql');
     }
 
     private function getStub(string $stub)
